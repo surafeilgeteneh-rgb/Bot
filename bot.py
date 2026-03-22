@@ -1,21 +1,30 @@
 import logging
 import time
+import json
+import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler, ContextTypes
 
 # ========== CONFIGURATION ==========
 BOT_TOKEN = "8784067730:AAEzhh9Ung97WhtZUw6NrKst65u5v7jyD2Y"
 OWNER_ID = 8111368444
-CHANNEL_ID = -1003787143260   # Your numeric channel ID
-EXPIRY_HOURS = 24              # 24 hours expiry
+CHANNEL_ID = -1003787143260
+EXPIRY_HOURS = 24
+DATA_FILE = "links.json"
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ========== COMMAND HANDLERS ==========
+def load_links():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r") as f:
+            return json.load(f)
+    return {}
+
+def save_links(links):
+    with open(DATA_FILE, "w") as f:
+        json.dump(links, f)
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome = (
         "🌟 <b>Welcome to Qeleme Tutorial!</b>\n\n"
@@ -72,15 +81,17 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id = int(user_id)
 
         if action == "approve":
-            # Create invite link with EXPIRY_HOURS hours and 1 user
+            # Create invite link with member_limit=1 and expiry
             expiry = int(time.time()) + (EXPIRY_HOURS * 3600)
-            logger.info(f"Creating invite link for user {user_id}, expiry {expiry}")
             link = await context.bot.create_chat_invite_link(
                 chat_id=CHANNEL_ID,
                 member_limit=1,
                 expire_date=expiry
             )
-            logger.info(f"Invite link created: {link.invite_link}")
+            # Store link info
+            links = load_links()
+            links[str(link.invite_link)] = {"user_id": user_id, "created": time.time()}
+            save_links(links)
 
             # Send link to user
             await context.bot.send_message(
@@ -129,13 +140,11 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     except Exception as e:
         logger.error(f"Admin callback error: {e}", exc_info=True)
-        # Send error message to admin
         await context.bot.send_message(
             chat_id=OWNER_ID,
             text=f"⚠️ <b>Error approving payment:</b>\n<code>{str(e)}</code>\nCheck logs.",
             parse_mode='HTML'
         )
-        # Notify user that something went wrong
         if 'user_id' in locals():
             await context.bot.send_message(
                 chat_id=user_id,
@@ -154,7 +163,6 @@ def main():
         app.add_handler(CallbackQueryHandler(admin_callback, pattern="^(approve|incorrect|reject)_"))
         app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
 
-        # Clear any existing webhook
         print("Clearing webhook...")
         app.bot.delete_webhook(drop_pending_updates=True)
 
