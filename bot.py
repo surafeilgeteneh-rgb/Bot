@@ -86,23 +86,30 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     photo = update.message.photo[-1]
-    caption = f"🧾 አዲስ ክፍያ / New Payment\n\n👤 @{user.username}\n🆔 ID: {user.id}\n💰 ዋጋ / Price: {PRICE} ብር / Birr"
-    keyboard = [[
-        InlineKeyboardButton("✅ አጽድቅ / Approve", callback_data=f"approve_{user.id}"),
-        InlineKeyboardButton("⚠️ ትክክለኛ ዋጋ ይላኩ / Pay Correct Amount", callback_data=f"incorrect_{user.id}"),
-        InlineKeyboardButton("❌ ውድቅ አድርግ / Reject", callback_data=f"reject_{user.id}")
-    ]]
+    caption = f"🧾 አዲስ ክፍያ / New Payment\n\n👤 @{user.username}\n🆔 ID: {user.id}\n💰 {PRICE} ብር / Birr"
+    keyboard = [
+        [
+            InlineKeyboardButton("✅ አጽድቅ / Approve", callback_data=f"approve_{user.id}"),
+            InlineKeyboardButton("⚠️ ትክክለኛ ዋጋ ይላኩ", callback_data=f"incorrect_{user.id}")
+        ],
+        [InlineKeyboardButton("❌ ውድቅ አድርግ / Reject", callback_data=f"reject_{user.id}")]
+    ]
     await context.bot.send_photo(chat_id=OWNER_ID, photo=photo.file_id, caption=caption, reply_markup=InlineKeyboardMarkup(keyboard))
     await update.message.reply_text("✅ ክፍያ ደርሶናል! ማጽደቅ ይጠብቁ።\nPayment received! Waiting for approval.")
 
 async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    action, user_id = query.data.split('_')
-    user_id = int(user_id)
+    data = query.data.split('_')
+    action = data[0]
+    user_id = int(data[1])
     
     if action == "approve":
-        link = await context.bot.create_chat_invite_link(chat_id=CHANNEL_ID, member_limit=1, expire_date=int(time.time()) + 86400)
+        link = await context.bot.create_chat_invite_link(
+            chat_id=CHANNEL_ID, 
+            member_limit=1, 
+            expire_date=int(time.time()) + 86400
+        )
         await context.bot.send_message(
             chat_id=user_id,
             text=f"✅ <b>ክፍያ ጸድቋል! / Payment Approved!</b>\n\n"
