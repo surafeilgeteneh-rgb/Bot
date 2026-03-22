@@ -6,7 +6,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 # ========== CONFIGURATION ==========
 BOT_TOKEN = "8784067730:AAEzhh9Ung97WhtZUw6NrKst65u5v7jyD2Y"
 OWNER_ID = 8111368444
-CHANNEL_ID = "@Qeleme_tutorial"
+CHANNEL_ID = " -1003787143260"
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
