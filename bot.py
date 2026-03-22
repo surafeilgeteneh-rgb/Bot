@@ -7,7 +7,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 BOT_TOKEN = "8784067730:AAEzhh9Ung97WhtZUw6NrKst65u5v7jyD2Y"
 OWNER_ID = 8111368444
 CHANNEL_ID = -1003787143260   # Your numeric channel ID
-EXPIRY_HOURS = 12
+EXPIRY_HOURS = 24              # 24 hours expiry
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -22,7 +22,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"💰 <b>Price:</b> 200 Birr\n"
         f"💳 <b>Payment:</b> Telebirr 0955061637\n"
         f"👤 <b>Name:</b> Seto Destawu\n"
-        f"⏰ <b>Link expires after</b> {EXPIRY_HOURS} hours\n\n"
+        f"⏰ <b>Your invite link will expire</b> {EXPIRY_HOURS} hours <b>after approval</b>.\n\n"
         "📞 <b>Support:</b> @Keleme_support\n\n"
         "Tap the button below after payment."
     )
@@ -72,13 +72,16 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id = int(user_id)
 
         if action == "approve":
-            # Create invite link with 12h expiry and 1 user
+            # Create invite link with EXPIRY_HOURS hours and 1 user
             expiry = int(time.time()) + (EXPIRY_HOURS * 3600)
+            logger.info(f"Creating invite link for user {user_id}, expiry {expiry}")
             link = await context.bot.create_chat_invite_link(
                 chat_id=CHANNEL_ID,
                 member_limit=1,
                 expire_date=expiry
             )
+            logger.info(f"Invite link created: {link.invite_link}")
+
             # Send link to user
             await context.bot.send_message(
                 chat_id=user_id,
@@ -86,7 +89,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     f"✅ <b>Payment Approved!</b>\n\n"
                     f"🔗 <b>Your unique invite link:</b>\n"
                     f"{link.invite_link}\n\n"
-                    f"⏰ <b>Expires in:</b> {EXPIRY_HOURS} hours\n"
+                    f"⏰ <b>Expires in:</b> {EXPIRY_HOURS} hours from now\n"
                     f"👤 <b>Valid for:</b> 1 person only\n\n"
                     f"⚠️ This link stops working after one use or after {EXPIRY_HOURS} hours.\n\n"
                     f"📞 Support: @Keleme_support"
@@ -125,7 +128,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await query.edit_message_caption(caption=f"❌ Rejected user {user_id}")
 
     except Exception as e:
-        logger.error(f"Admin callback error: {e}")
+        logger.error(f"Admin callback error: {e}", exc_info=True)
         # Send error message to admin
         await context.bot.send_message(
             chat_id=OWNER_ID,
