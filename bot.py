@@ -29,8 +29,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome = (
         "🌟 <b>Welcome to Qeleme Tutorial!</b>\n\n"
         f"💰 <b>Price:</b> 200 Birr\n"
-        f"💳 <b>Payment:</b> Telebirr 0955061637\n"
-        f"👤 <b>Name:</b> Seto Destawu\n"
+        f"💳 <b>Payment:</b> CBE\n"
+        f"📞 <b>Account:</b> 1000736023184\n"
+        f"👤 <b>Name:</b> MR Getachew asefa\n"
         f"⏰ <b>Your invite link will expire</b> {EXPIRY_HOURS} hours <b>after approval</b>.\n\n"
         "📞 <b>Support:</b> @Keleme_support\n\n"
         "Tap the button below after payment."
@@ -44,7 +45,7 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data == "send_payment":
         await query.edit_message_text(
             "📸 <b>Send your payment screenshot</b>\n\n"
-            f"Please send a screenshot of your 200 Birr payment to Telebirr 0955061637 (Seto Destawu).",
+            f"Please send a screenshot of your 200 Birr payment to CBE account 1000736023184 (MR Getachew asefa).",
             parse_mode='HTML'
         )
 
@@ -114,9 +115,9 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 chat_id=user_id,
                 text=(
                     f"⚠️ <b>Incorrect Payment Amount</b>\n\n"
-                    f"Please pay the correct amount of <b>200 Birr</b> and resend the screenshot.\n\n"
-                    f"💳 <b>Payment:</b> Telebirr 0955061637\n"
-                    f"👤 <b>Name:</b> Seto Destawu\n\n"
+                    f"Please pay the correct amount of <b>200 Birr</b> to CBE account 1000736023184 (MR Getachew asefa) and resend the screenshot.\n\n"
+                    f"💳 <b>Payment:</b> CBE 1000736023184\n"
+                    f"👤 <b>Name:</b> MR Getachew asefa\n\n"
                     f"📞 Support: @Keleme_support"
                 ),
                 parse_mode='HTML'
@@ -129,8 +130,8 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 text=(
                     f"❌ <b>Payment Rejected</b>\n\n"
                     f"Please resend with correct payment details.\n\n"
-                    f"💳 <b>Payment:</b> Telebirr 0955061637\n"
-                    f"👤 <b>Name:</b> Seto Destawu\n"
+                    f"💳 <b>Payment:</b> CBE 1000736023184\n"
+                    f"👤 <b>Name:</b> MR Getachew asefa\n"
                     f"💰 <b>Amount:</b> 200 Birr\n\n"
                     f"📞 Support: @Keleme_support"
                 ),
