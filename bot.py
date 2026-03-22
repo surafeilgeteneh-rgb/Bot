@@ -18,31 +18,31 @@ logger = logging.getLogger(__name__)
 # ========== COMMAND HANDLERS ==========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome = (
-        "🌟 *Welcome to Qeleme Tutorial!*\n\n"
-        f"💰 *Price:* 200 Birr\n"
-        f"💳 *Payment:* Telebirr 0955061637\n"
-        f"👤 *Name:* Seto Destawu\n"
-        f"⏰ *Link expires after* {EXPIRY_HOURS} hours\n\n"
-        "📞 *Support:* @Keleme_support\n\n"
+        "🌟 <b>Welcome to Qeleme Tutorial!</b>\n\n"
+        f"💰 <b>Price:</b> 200 Birr\n"
+        f"💳 <b>Payment:</b> Telebirr 0955061637\n"
+        f"👤 <b>Name:</b> Seto Destawu\n"
+        f"⏰ <b>Link expires after</b> {EXPIRY_HOURS} hours\n\n"
+        "📞 <b>Support:</b> @Keleme_support\n\n"
         "Tap the button below after payment."
     )
     keyboard = [[InlineKeyboardButton("💰 Send Payment Proof", callback_data="send_payment")]]
-    await update.message.reply_text(welcome, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup(keyboard))
+    await update.message.reply_text(welcome, parse_mode='HTML', reply_markup=InlineKeyboardMarkup(keyboard))
 
 async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     if query.data == "send_payment":
         await query.edit_message_text(
-            "📸 *Send your payment screenshot*\n\n"
-            f"Please send a screenshot of your {200} Birr payment to Telebirr 0955061637 (Seto Destawu).",
-            parse_mode='Markdown'
+            "📸 <b>Send your payment screenshot</b>\n\n"
+            f"Please send a screenshot of your 200 Birr payment to Telebirr 0955061637 (Seto Destawu).",
+            parse_mode='HTML'
         )
 
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     photo = update.message.photo[-1]
-    caption = f"🧾 *New Payment*\n\n👤 @{user.username}\n🆔 ID: `{user.id}`"
+    caption = f"🧾 <b>New Payment</b>\n\n👤 @{user.username}\n🆔 ID: <code>{user.id}</code>"
     keyboard = [
         [
             InlineKeyboardButton("✅ Approve", callback_data=f"approve_{user.id}"),
@@ -55,10 +55,10 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=OWNER_ID,
             photo=photo.file_id,
             caption=caption,
-            parse_mode='Markdown',
+            parse_mode='HTML',
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
-        await update.message.reply_text("✅ *Payment sent!*\n\nWaiting for admin approval.", parse_mode='Markdown')
+        await update.message.reply_text("✅ <b>Payment sent!</b>\n\nWaiting for admin approval.", parse_mode='HTML')
     except Exception as e:
         logger.error(f"Failed to forward payment: {e}")
         await update.message.reply_text("❌ Error sending payment. Please try again or contact support.")
@@ -83,15 +83,15 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(
                 chat_id=user_id,
                 text=(
-                    f"✅ *Payment Approved!*\n\n"
-                    f"🔗 *Your unique invite link:*\n"
+                    f"✅ <b>Payment Approved!</b>\n\n"
+                    f"🔗 <b>Your unique invite link:</b>\n"
                     f"{link.invite_link}\n\n"
-                    f"⏰ *Expires in:* {EXPIRY_HOURS} hours\n"
-                    f"👤 *Valid for:* 1 person only\n\n"
+                    f"⏰ <b>Expires in:</b> {EXPIRY_HOURS} hours\n"
+                    f"👤 <b>Valid for:</b> 1 person only\n\n"
                     f"⚠️ This link stops working after one use or after {EXPIRY_HOURS} hours.\n\n"
                     f"📞 Support: @Keleme_support"
                 ),
-                parse_mode='Markdown'
+                parse_mode='HTML'
             )
             await query.edit_message_caption(caption=f"✅ Approved! Link sent to user {user_id}")
 
@@ -99,13 +99,13 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(
                 chat_id=user_id,
                 text=(
-                    f"⚠️ *Incorrect Payment Amount*\n\n"
-                    f"Please pay the correct amount of *200 Birr* and resend the screenshot.\n\n"
-                    f"💳 *Payment:* Telebirr 0955061637\n"
-                    f"👤 *Name:* Seto Destawu\n\n"
+                    f"⚠️ <b>Incorrect Payment Amount</b>\n\n"
+                    f"Please pay the correct amount of <b>200 Birr</b> and resend the screenshot.\n\n"
+                    f"💳 <b>Payment:</b> Telebirr 0955061637\n"
+                    f"👤 <b>Name:</b> Seto Destawu\n\n"
                     f"📞 Support: @Keleme_support"
                 ),
-                parse_mode='Markdown'
+                parse_mode='HTML'
             )
             await query.edit_message_caption(caption=f"⚠️ Wrong amount sent to user {user_id}")
 
@@ -113,14 +113,14 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(
                 chat_id=user_id,
                 text=(
-                    f"❌ *Payment Rejected*\n\n"
+                    f"❌ <b>Payment Rejected</b>\n\n"
                     f"Please resend with correct payment details.\n\n"
-                    f"💳 *Payment:* Telebirr 0955061637\n"
-                    f"👤 *Name:* Seto Destawu\n"
-                    f"💰 *Amount:* 200 Birr\n\n"
+                    f"💳 <b>Payment:</b> Telebirr 0955061637\n"
+                    f"👤 <b>Name:</b> Seto Destawu\n"
+                    f"💰 <b>Amount:</b> 200 Birr\n\n"
                     f"📞 Support: @Keleme_support"
                 ),
-                parse_mode='Markdown'
+                parse_mode='HTML'
             )
             await query.edit_message_caption(caption=f"❌ Rejected user {user_id}")
 
@@ -129,16 +129,15 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Send error message to admin
         await context.bot.send_message(
             chat_id=OWNER_ID,
-            text=f"⚠️ *Error approving payment:*\n```\n{str(e)}\n```\nCheck logs.",
-            parse_mode='Markdown'
+            text=f"⚠️ <b>Error approving payment:</b>\n<code>{str(e)}</code>\nCheck logs.",
+            parse_mode='HTML'
         )
         # Notify user that something went wrong
         if 'user_id' in locals():
             await context.bot.send_message(
                 chat_id=user_id,
-                text="⚠️ *An error occurred while processing your payment.*\n"
-                     "Please contact support @Keleme_support.",
-                parse_mode='Markdown'
+                text="⚠️ <b>An error occurred while processing your payment.</b>\nPlease contact support @Keleme_support.",
+                parse_mode='HTML'
             )
         await query.edit_message_caption(caption="⚠️ Error processing. Check logs.")
 
