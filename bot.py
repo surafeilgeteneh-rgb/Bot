@@ -1,158 +1,74 @@
 import logging
 import time
-import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler, ContextTypes
 
 # ========== CONFIGURATION ==========
-BOT_TOKEN = os.environ.get("BOT_TOKEN")
+BOT_TOKEN = "8784067730:AAEzhh9Ung97WhtZUw6NrKst65u5v7jyD2Y"
 OWNER_ID = 8111368444
 CHANNEL_ID = "@Qeleme_tutorial"
-SUPPORT_USERNAME = "@Keleme_support"
-PRICE = 200
-
-if not BOT_TOKEN:
-    raise ValueError("BOT_TOKEN environment variable not set")
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # ========== COMMANDS ==========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    welcome = f"""🌟 <b>እንኳን ወደ Qeleme Tutorial በሰላም መጡ!</b> 🌟
+    welcome = """🌟 Welcome to Qeleme Tutorial!
 
-🇪🇹 <b>በአማርኛ:</b>
-📚 ኮርሱን ለመግዛት:
-💳 ክፍያ: <b>ቴሌብር 0955061637</b>
-👤 ስም: Seto Destawu
-💰 ዋጋ: <b>{PRICE} ብር</b>
+💰 Price: 200 Birr
+💳 Payment: Telebirr 0955061637
+👤 Name: Seto Destawu
 
-✅ ከክፍያ በኋላ ታች ያለውን ቁልፍ ይጫኑ
+📞 Support: @Keleme_support
 
-━━━━━━━━━━━━━━━━━━
-
-🇬🇧 <b>In English:</b>
-🎓 <b>Welcome to Qeleme Tutorial!</b>
-
-💳 <b>Payment:</b> Telebirr 0955061637
-👤 <b>Name:</b> Seto Destawu
-💰 <b>Price:</b> <b>{PRICE} Birr</b>
-
-✅ Tap button below after payment
-
-━━━━━━━━━━━━━━━━━━
-📞 <b>Support:</b> {SUPPORT_USERNAME}
-"""
-    keyboard = [
-        [InlineKeyboardButton("💰 ክፍያ አስረክብ / Send Payment", callback_data="send_payment")],
-        [InlineKeyboardButton("📞 ድጋፍ / Support", callback_data="support")],
-        [InlineKeyboardButton("ℹ️ መመሪያ / Instructions", callback_data="instructions")]
-    ]
-    await update.message.reply_text(welcome, parse_mode='HTML', reply_markup=InlineKeyboardMarkup(keyboard))
+Tap button below after payment."""
+    keyboard = [[InlineKeyboardButton("💰 Send Payment Proof", callback_data="send_payment")]]
+    await update.message.reply_text(welcome, reply_markup=InlineKeyboardMarkup(keyboard))
 
 async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     if query.data == "send_payment":
-        await query.edit_message_text(
-            f"📸 <b>ክፍያ ማስረጃ ላኩ / Send payment screenshot</b>\n\n"
-            f"እባክዎ {PRICE} ብር ክፍያ ማስረጃ ፎቶ ይላኩ።\n"
-            f"Please send your {PRICE} Birr payment screenshot.",
-            parse_mode='HTML'
-        )
-    elif query.data == "support":
-        await query.edit_message_text(
-            f"📞 <b>ድጋፍ / Support</b>\n\n"
-            f"ማንኛውም ጥያቄ ካለዎት ያነጋግሩን:\n"
-            f"For any questions, contact:\n\n"
-            f"👉 {SUPPORT_USERNAME}\n\n"
-            f"መልስ በ24 ሰአት ውስጥ ይሰጣል።\n"
-            f"We reply within 24 hours.",
-            parse_mode='HTML'
-        )
-    elif query.data == "instructions":
-        await query.edit_message_text(
-            "📖 <b>መመሪያ / Instructions</b>\n\n"
-            "1️⃣ ክፍያ ይላኩ / Send payment\n"
-            "2️⃣ ማስረጃ ይላኩ / Send screenshot\n"
-            "3️⃣ ማጽደቅ ይጠብቁ / Wait for approval\n"
-            "4️⃣ ልዩ የግብአት ሊንክ ያግኙ / Get unique invite link\n"
-            "5️⃣ ቻናሉን ይቀላቀሉ / Join channel\n\n"
-            f"💰 <b>ዋጋ / Price:</b> {PRICE} ብር / Birr\n\n"
-            "<i>ማስታወሻ:</i> ሊንክ 1 ጊዜ ብቻ ጥቅም ላይ ይውላል\n"
-            "<i>Note:</i> Link is valid for 1 use only.",
-            parse_mode='HTML'
-        )
+        await query.edit_message_text("📸 Send your payment screenshot (200 Birr).")
 
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     photo = update.message.photo[-1]
-    caption = f"🧾 አዲስ ክፍያ / New Payment\n\n👤 @{user.username}\n🆔 ID: {user.id}\n💰 {PRICE} ብር / Birr"
+    caption = f"Payment from @{user.username} (ID: {user.id})"
     keyboard = [
         [
-            InlineKeyboardButton("✅ አጽድቅ / Approve", callback_data=f"approve_{user.id}"),
-            InlineKeyboardButton("⚠️ ትክክለኛ ዋጋ ይላኩ", callback_data=f"incorrect_{user.id}")
+            InlineKeyboardButton("✅ Approve", callback_data=f"approve_{user.id}"),
+            InlineKeyboardButton("⚠️ Pay Correct Amount", callback_data=f"incorrect_{user.id}")
         ],
-        [InlineKeyboardButton("❌ ውድቅ አድርግ / Reject", callback_data=f"reject_{user.id}")]
+        [InlineKeyboardButton("❌ Reject", callback_data=f"reject_{user.id}")]
     ]
     await context.bot.send_photo(chat_id=OWNER_ID, photo=photo.file_id, caption=caption, reply_markup=InlineKeyboardMarkup(keyboard))
-    await update.message.reply_text("✅ ክፍያ ደርሶናል! ማጽደቅ ይጠብቁ።\nPayment received! Waiting for approval.")
+    await update.message.reply_text("✅ Payment sent! Waiting for approval.")
 
 async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    data = query.data.split('_')
-    action = data[0]
-    user_id = int(data[1])
+    action, user_id = query.data.split('_')
+    user_id = int(user_id)
     
     if action == "approve":
-        link = await context.bot.create_chat_invite_link(
-            chat_id=CHANNEL_ID, 
-            member_limit=1, 
-            expire_date=int(time.time()) + 86400
-        )
-        await context.bot.send_message(
-            chat_id=user_id,
-            text=f"✅ <b>ክፍያ ጸድቋል! / Payment Approved!</b>\n\n"
-                 f"🔗 ልዩ የግብአት ሊንክዎ (1 ጊዜ ብቻ):\n"
-                 f"Your unique invite link (1 use only):\n\n"
-                 f"{link.invite_link}\n\n"
-                 f"⏰ ሊንክ ከ24 ሰአት በኋላ ያበቃል\n"
-                 f"Link expires in 24 hours\n\n"
-                 f"📞 እገዛ ካስፈለገ: {SUPPORT_USERNAME}",
-            parse_mode='HTML'
-        )
-        await query.edit_message_caption(caption=f"✅ Approved! Link sent to user {user_id}")
+        link = await context.bot.create_chat_invite_link(chat_id=CHANNEL_ID, member_limit=1, expire_date=int(time.time()) + 86400)
+        await context.bot.send_message(chat_id=user_id, text=f"✅ Approved! Your link: {link.invite_link}")
+        await query.edit_message_caption(caption=f"✅ Approved! Link sent")
     
     elif action == "incorrect":
-        await context.bot.send_message(
-            chat_id=user_id,
-            text=f"⚠️ <b>ክፍያ ትክክል አይደለም / Incorrect Payment Amount</b>\n\n"
-                 f"እባክዎ ትክክለኛውን ዋጋ {PRICE} ብር ይክፈሉ እና እንደገና ይላኩ።\n"
-                 f"Please pay the correct amount of {PRICE} Birr and resend the screenshot.\n\n"
-                 f"💳 ክፍያ / Payment: Telebirr 0955061637 (Seto Destawu)\n\n"
-                 f"📞 እገዛ: {SUPPORT_USERNAME}",
-            parse_mode='HTML'
-        )
-        await query.edit_message_caption(caption=f"⚠️ Incorrect amount sent to user {user_id}")
+        await context.bot.send_message(chat_id=user_id, text="⚠️ Please pay the correct amount (200 Birr) and resend screenshot.\n\n💳 Telebirr: 0955061637\n👤 Seto Destawu\n📞 Support: @Keleme_support")
+        await query.edit_message_caption(caption=f"⚠️ Incorrect amount")
     
     elif action == "reject":
-        await context.bot.send_message(
-            chat_id=user_id,
-            text=f"❌ <b>ክፍያ ውድቅ ተደርጓል / Payment Rejected</b>\n\n"
-                 f"እባክዎ በትክክል ይላኩ።\n"
-                 f"Please resend with correct details.\n\n"
-                 f"💳 ክፍያ / Payment: Telebirr 0955061637 (Seto Destawu)\n\n"
-                 f"📞 እገዛ: {SUPPORT_USERNAME}",
-            parse_mode='HTML'
-        )
-        await query.edit_message_caption(caption=f"❌ Rejected user {user_id}")
+        await context.bot.send_message(chat_id=user_id, text="❌ Payment rejected. Please resend with correct details.\n📞 Support: @Keleme_support")
+        await query.edit_message_caption(caption=f"❌ Rejected")
 
 # ========== MAIN ==========
 if __name__ == "__main__":
     app = Application.builder().token(BOT_TOKEN).build()
     
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(CallbackQueryHandler(handle_callback, pattern="^(send_payment|support|instructions)$"))
+    app.add_handler(CallbackQueryHandler(handle_callback, pattern="send_payment"))
     app.add_handler(CallbackQueryHandler(admin_callback, pattern="^(approve|incorrect|reject)_"))
     app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
     
