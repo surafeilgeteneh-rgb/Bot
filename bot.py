@@ -7,7 +7,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 BOT_TOKEN = "8784067730:AAEzhh9Ung97WhtZUw6NrKst65u5v7jyD2Y"
 OWNER_ID = 8111368444
 CHANNEL_ID = "@Qeleme_tutorial"  # Your channel username
-SUPPORT_USERNAME = "@Qeleme_bot"
+SUPPORT_USERNAME = "@Keleme_support"
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
