@@ -6,11 +6,10 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 # ========== CONFIGURATION ==========
 BOT_TOKEN = "8784067730:AAEzhh9Ung97WhtZUw6NrKst65u5v7jyD2Y"
 OWNER_ID = 8111368444
-CHANNEL_ID = " -1003787143260"
+CHANNEL_ID = -1003787143260
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-# ========== COMMANDS ==========
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome = """🌟 Welcome to Qeleme Tutorial!
 
@@ -63,7 +62,6 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(chat_id=user_id, text="❌ Payment rejected. Please resend with correct details.\n📞 Support: @Keleme_support")
         await query.edit_message_caption(caption=f"❌ Rejected")
 
-# ========== MAIN ==========
 if __name__ == "__main__":
     app = Application.builder().token(BOT_TOKEN).build()
     
