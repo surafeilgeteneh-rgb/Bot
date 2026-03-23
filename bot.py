@@ -9,6 +9,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 BOT_TOKEN = "8784067730:AAEzhh9Ung97WhtZUw6NrKst65u5v7jyD2Y"
 OWNER_ID = 8111368444
 CHANNEL_ID = -1003787143260
+EXPIRY_HOURS = 24
 DATA_FILE = "links.json"
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -31,6 +32,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"💳 <b>Payment Methods:</b>\n"
         f"• <b>Telebirr:</b> 0955061637 (Seto Destawu)\n"
         f"• <b>CBE:</b> 1000736023184 (MR Getachew asefa)\n\n"
+        f"⏰ <b>Your invite link will expire</b> {EXPIRY_HOURS} hours <b>after approval</b>.\n\n"
         "📞 <b>Support:</b> @Keleme_support\n\n"
         "Tap the button below after payment."
     )
@@ -83,24 +85,28 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id = int(user_id)
 
         if action == "approve":
-            # Create invite link with member_limit=1, NO expiry
+            # Create invite link with member_limit=1 and expiry
+            expiry = int(time.time()) + (EXPIRY_HOURS * 3600)
             link = await context.bot.create_chat_invite_link(
                 chat_id=CHANNEL_ID,
-                member_limit=1
+                member_limit=1,
+                expire_date=expiry
             )
-            # Store link info (optional)
+            # Store link info
             links = load_links()
             links[str(link.invite_link)] = {"user_id": user_id, "created": time.time()}
             save_links(links)
 
+            # Send link to user
             await context.bot.send_message(
                 chat_id=user_id,
                 text=(
                     f"✅ <b>Payment Approved!</b>\n\n"
                     f"🔗 <b>Your unique invite link:</b>\n"
                     f"{link.invite_link}\n\n"
+                    f"⏰ <b>Expires in:</b> {EXPIRY_HOURS} hours from now\n"
                     f"👤 <b>Valid for:</b> 1 person only\n\n"
-                    f"⚠️ This link stops working after one use.\n\n"
+                    f"⚠️ This link stops working after one use or after {EXPIRY_HOURS} hours.\n\n"
                     f"📞 Support: @Keleme_support"
                 ),
                 parse_mode='HTML'
@@ -153,6 +159,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
         await query.edit_message_caption(caption="⚠️ Error processing. Check logs.")
 
+# ========== MAIN ==========
 def main():
     try:
         app = Application.builder().token(BOT_TOKEN).build()
