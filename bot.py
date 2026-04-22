@@ -6,7 +6,8 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 # ========== CONFIGURATION ==========
 BOT_TOKEN = "8784067730:AAEzhh9Ung97WhtZUw6NrKst65u5v7jyD2Y"
 OWNER_ID = 8111368444
-GROUP_ID = -1003787143260  # Change this to your group ID
+GROUP_ID = ‎-1003777438953
+  # Change this to your group ID
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
