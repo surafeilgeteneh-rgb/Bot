@@ -6,7 +6,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 # ========== CONFIGURATION ==========
 BOT_TOKEN = "8784067730:AAEzhh9Ung97WhtZUw6NrKst65u5v7jyD2Y"
 OWNER_ID = 8111368444
-CHANNEL_ID = -1003787143260
+GROUP_ID = -1003787143260  # Change this to your group ID
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -84,8 +84,9 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user_id = int(user_id)
 
         if action == "approve":
+            # Create invite link for group
             link = await context.bot.create_chat_invite_link(
-                chat_id=CHANNEL_ID,
+                chat_id=GROUP_ID,
                 member_limit=1
             )
             await context.bot.send_message(
