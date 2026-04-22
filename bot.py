@@ -17,6 +17,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Price: 200 Birr\n\n"
         "Payment Methods:\n"
         "- Telebirr: 0955061637 (Seto Destawu)\n"
+        "- CBE : 1000670894561 (
+Melkam Endalamaw )\n"
         "Support: @Keleme_support\n\n"
         "Tap the button below after payment."
     )
