@@ -17,6 +17,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Price: 200 Birr\n\n"
         "Payment Methods:\n"
         "- Telebirr: 0955061637 (Seto Destawu)\n"
+        "- CBE: 1000670894561 (Melkam Endalamaw)\n"
         "Support: @Keleme_support\n\n"
         "Tap the button below after payment."
     )
@@ -31,7 +32,7 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Send your payment screenshot.\n\n"
             "Please send a screenshot of your 200 Birr payment to:\n"
             "- Telebirr: 0955061637 (Seto Destawu)\n"
-            "- CBE: 1000736023184 (MR Getachew asefa)\n\n"
+            "- CBE: 1000670894561 (Melkam Endalamaw)\n\n"
             "Make sure the screenshot shows the transaction details."
         )
 
@@ -110,7 +111,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "Please pay the correct amount and resend your screenshot.\n\n"
                     "Payment Methods:\n"
                     "- Telebirr: 0955061637 (Seto Destawu)\n"
-                    "- CBE: 1000736023184 (MR Getachew asefa)\n\n"
+                    "- CBE: 1000670894561 (Melkam Endalamaw)\n\n"
                     "Support: @Keleme_support"
                 )
             )
@@ -125,7 +126,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "Please resend with correct payment details.\n\n"
                     "Payment Methods:\n"
                     "- Telebirr: 0955061637 (Seto Destawu)\n"
-                    "- CBE: 1000736023184 (MR Getachew asefa)\n"
+                    "- CBE: 1000670894561 (Melkam Endalamaw)\n"
                     "Amount: 200 Birr\n\n"
                     "Support: @Keleme_support"
                 )
@@ -142,7 +143,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "Your payment has been flagged for review.\n\n"
                     "💰 REFUND INFORMATION:\n"
                     "- Telebirr: 0955061637 (Seto Destawu)\n"
-                    "- CBE: 1000736023184 (MR Getachew asefa)\n\n"
+                    "- CBE: 1000670894561 (Melkam Endalamaw)\n\n"
                     "Send your transaction details to @Keleme_support for refund.\n\n"
                     "Human users only. Bots will be blocked permanently."
                 )
@@ -192,7 +193,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "Refund will be processed within 24-48 hours.\n\n"
                     "REFUND ACCOUNT:\n"
                     "- Telebirr: 0955061637 (Seto Destawu)\n"
-                    "- CBE: 1000736023184 (MR Getachew asefa)\n\n"
+                    "- CBE: 1000670894561 (Melkam Endalamaw)\n\n"
                     "Note: Refunds may take up to 3 business days to appear."
                 )
             )
