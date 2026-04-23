@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome = (
-        "Welcome to Goal Tutorial!\n\n"
+        "Welcome to Qeleme Tutorial!\n\n"
         "Price: 200 Birr\n\n"
         "Payment Methods:\n"
         "- Telebirr: 0955061637 (Seto Destawu)\n"
@@ -37,6 +37,10 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    # ONLY process photos sent in PRIVATE CHAT - ignore group photos
+    if update.effective_chat.type != "private":
+        return  # Ignore photos sent in groups
+    
     user = update.effective_user
     photo = update.message.photo[-1]
     caption = f"New Payment\n\n@{user.username} (ID: {user.id})"
@@ -97,7 +101,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     f"{link.invite_link}\n\n"
                     "Valid for: 1 person only\n"
                     "This link stops working after one use.\n\n"
-                    "Support: @Keleme_support"
+                    "Support: @Goal_support"
                 )
             )
             await query.edit_message_caption(caption=f"✅ Approved! Link sent to user {user_id}")
@@ -113,7 +117,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "Payment Methods:\n"
                     "- Telebirr: 0955061637 (Seto Destawu)\n"
                     "- CBE: 1000670894561 (Melkam Endalamaw)\n\n"
-                    "Support: @Keleme_support"
+                    "Support: @Goal_support"
                 )
             )
             await query.edit_message_caption(caption=f"⚠️ Wrong amount sent to user {user_id}")
@@ -129,7 +133,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "- Telebirr: 0955061637 (Seto Destawu)\n"
                     "- CBE: 1000670894561 (Melkam Endalamaw)\n"
                     "Amount: 200 Birr\n\n"
-                    "Support: @Keleme_support"
+                    "Support: @Goal_support"
                 )
             )
             await query.edit_message_caption(caption=f"❌ Rejected user {user_id}")
@@ -145,7 +149,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "💰 REFUND INFORMATION:\n"
                     "- Telebirr: 0955061637 (Seto Destawu)\n"
                     "- CBE: 1000670894561 (Melkam Endalamaw)\n\n"
-                    "Send your transaction details to @Keleme_support for refund.\n\n"
+                    "Send your transaction details to @Goal_support for refund.\n\n"
                     "Human users only. Bots will be blocked permanently."
                 )
             )
@@ -163,7 +167,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "- Sender name\n"
                     "- Date and time\n\n"
                     "Resend the screenshot clearly and we will process your payment.\n\n"
-                    "Support: @Keleme_support"
+                    "Support: @Goal_support"
                 )
             )
             await query.edit_message_caption(caption=f"📸 Unclear screenshot - user {user_id}")
@@ -175,7 +179,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "🔄 ALREADY PAID / ACTIVE MEMBER\n\n"
                     "Our records show you already have active access to our courses.\n\n"
                     "You do not need to pay again.\n\n"
-                    "If you lost your invite link, contact @Keleme_support for help.\n\n"
+                    "If you lost your invite link, contact @Goal_support for help.\n\n"
                     "If this was a duplicate payment, please contact support for refund."
                 )
             )
@@ -186,7 +190,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 chat_id=user_id,
                 text=(
                     "💰 REFUND REQUEST RECEIVED\n\n"
-                    "To process your refund, please send the following to @Keleme_support:\n\n"
+                    "To process your refund, please send the following to @Goal_support:\n\n"
                     "- Payment screenshot\n"
                     "- Transaction ID\n"
                     "- Your full name\n"
@@ -210,7 +214,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "❌ Permanent ban from all our services\n"
                     "❌ Your account reported to Telegram\n"
                     "❌ Legal action may be taken\n\n"
-                    "If this was a mistake, contact @Keleme_support IMMEDIATELY with PROOF.\n\n"
+                    "If this was a mistake, contact @Goal_support IMMEDIATELY with PROOF.\n\n"
                     "LEGITIMATE PAYMENTS ONLY. NO EXCEPTIONS."
                 )
             )
@@ -228,7 +232,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "❌ No refund will be issued\n"
                     "❌ Blacklisted from all future courses\n\n"
                     "Each payment is valid for ONE person only.\n\n"
-                    "Contact @Keleme_support if this is an error.\n\n"
+                    "Contact @Goal_support if this is an error.\n\n"
                     "FRAUDULENT ACTIVITY WILL NOT BE TOLERATED."
                 )
             )
@@ -249,7 +253,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 text=(
                     "📝 Please write your message below.\n\n"
                     "We will get back to you as soon as possible.\n\n"
-                    "Support: @Keleme_support"
+                    "Support: @Goal_support"
                 )
             )
             await query.edit_message_caption(caption=f"📝 Student can write - user {user_id}")
@@ -263,7 +267,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if 'user_id' in locals():
             await context.bot.send_message(
                 chat_id=user_id,
-                text="An error occurred while processing your payment.\nPlease contact support @Keleme_support."
+                text="An error occurred while processing your payment.\nPlease contact support @Goal_support."
             )
         await query.edit_message_caption(caption="Error processing. Check logs.")
 
@@ -278,7 +282,7 @@ async def handle_admin_message(update: Update, context: ContextTypes.DEFAULT_TYP
         
         await context.bot.send_message(
             chat_id=user_id,
-            text=f"📝 Message from Admin:\n\n{message_text}\n\nSupport: @Keleme_support"
+            text=f"📝 Message from Admin:\n\n{message_text}\n\nSupport: @Goal_support"
         )
         
         await update.message.reply_text(f"✅ Custom message sent to user {user_id}")
