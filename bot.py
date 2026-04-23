@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome = (
-        "Welcome to Qeleme Tutorial!\n\n"
+        "Welcome to Goal Tutorial!\n\n"
         "Price: 200 Birr\n\n"
         "Payment Methods:\n"
         "- Telebirr: 0955061637 (Seto Destawu)\n"
