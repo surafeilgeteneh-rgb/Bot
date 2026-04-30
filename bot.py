@@ -4,7 +4,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler, ContextTypes
 
 # ========== CONFIGURATION ==========
-BOT_TOKEN = "8784067730:AAEzhh9Ung97WhtZUw6NrKst65u5v7jyD2Y"
+BOT_TOKEN = "8754532639:AAGob1OCOjUlI2vFHGykhN6b5Pi7jUUwzo8"
 OWNER_ID = 8111368444
 GROUP_ID = -1003777438953  # Your group ID
 
@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     welcome = (
-        "Welcome to Qeleme Tutorial!\n\n"
-        "Price: 200 Birr\n\n"
+        "Welcome to Goal Tutorial!\n\n"
+        "Price: 100 Birr\n\n"
         "Payment Methods:\n"
         "- Telebirr: 0955061637 (Seto Destawu)\n"
         "- CBE: 1000670894561 (Melkam Endalamaw)\n"
@@ -30,7 +30,7 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data == "send_payment":
         await query.edit_message_text(
             "Send your payment screenshot.\n\n"
-            "Please send a screenshot of your 200 Birr payment to:\n"
+            "Please send a screenshot of your 100 Birr payment to:\n"
             "- Telebirr: 0955061637 (Seto Destawu)\n"
             "- CBE: 1000670894561 (Melkam Endalamaw)\n\n"
             "Make sure the screenshot shows the transaction details."
@@ -112,7 +112,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 text=(
                     "⚠️ INCORRECT PAYMENT AMOUNT\n\n"
                     "You sent the wrong amount.\n\n"
-                    "Required amount: 200 Birr\n\n"
+                    "Required amount: 100 Birr\n\n"
                     "Please pay the correct amount and resend your screenshot.\n\n"
                     "Payment Methods:\n"
                     "- Telebirr: 0955061637 (Seto Destawu)\n"
@@ -132,7 +132,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "Payment Methods:\n"
                     "- Telebirr: 0955061637 (Seto Destawu)\n"
                     "- CBE: 1000670894561 (Melkam Endalamaw)\n"
-                    "Amount: 200 Birr\n\n"
+                    "Amount: 100 Birr\n\n"
                     "Support: @Goal_support"
                 )
             )
@@ -163,7 +163,7 @@ async def admin_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "Your payment screenshot is not clear or missing information.\n\n"
                     "Please send a CLEAR screenshot showing:\n"
                     "- Transaction ID\n"
-                    "- Amount (200 Birr)\n"
+                    "- Amount (100 Birr)\n"
                     "- Sender name\n"
                     "- Date and time\n\n"
                     "Resend the screenshot clearly and we will process your payment.\n\n"
@@ -301,7 +301,7 @@ def main():
         print("Clearing webhook...")
         app.bot.delete_webhook(drop_pending_updates=True)
         
-        print("🤖 Qeleme Bot is running...")
+        print("🤖 Goal Tutorial Bot is running...")
         app.run_polling()
         
     except Exception as e:
